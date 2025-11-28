@@ -1,0 +1,373 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>GAD Interactive Poll – Orange Theme</title>
+  <style>
+    :root { 
+      --orange:#FF7A00; 
+      --orange-dark:#E86400; 
+      --bg:#fff7f0; 
+      --text:#222; 
+      --muted:#666; 
+      --accent:#ffb17a; 
+    }
+    * { box-sizing: border-box; }
+    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Noto Sans, Arial, sans-serif; background: var(--bg); color: var(--text); margin: 0; }
+    header { background: linear-gradient(135deg,var(--orange) 0%, var(--orange-dark) 100%); color: white; padding: 24px 20px; }
+    header h1 { margin: 0 0 6px; font-size: 1.6rem; }
+    header p { margin: 0; opacity: .9; }
+    main { max-width: 960px; margin: 20px auto; padding: 0 16px 32px; }
+    .card { background: white; border-radius: 14px; box-shadow: 0 10px 24px rgba(255,122,0,.15); padding: 18px; margin-bottom: 16px; }
+    .title { display:flex; align-items:center; gap:12px; }
+    .title svg { width: 28px; height: 28px; flex: 0 0 28px; }
+    .q { margin-top: 10px; font-weight: 600; }
+    .options { margin-top: 8px; display:grid; gap:8px; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+    .options label { display:flex; align-items:center; gap:10px; background:#fff9f5; border:1px solid #ffe0c5; padding:10px 12px; border-radius:10px; cursor:pointer; }
+    .options input[type="radio"] { accent-color: var(--orange); }
+    .grid2 .options { grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }
+    .meta { display:grid; grid-template-columns: 1fr 1fr; gap:12px; }
+    .meta input { padding:10px 12px; border:1px solid #ffd3ad; border-radius:10px; font-size: 1rem; background:#fffdf9; }
+    .actions { display:flex; flex-wrap:wrap; gap:10px; margin-top: 14px; }
+    button { border: none; background: var(--orange); color: white; padding: 12px 16px; border-radius: 10px; font-weight: 600; cursor: pointer; }
+    button.secondary { background: white; color: var(--orange-dark); border: 2px solid var(--orange); }
+    button:focus { outline: 3px solid var(--accent); }
+    .notice { font-size:.92rem; color: var(--muted); margin-top: 10px; }
+    .progress { height: 8px; background: #ffe3cc; border-radius: 999px; overflow: hidden; margin-top: 10px; }
+    .bar { height: 100%; background: var(--orange); width: 0%; transition: width .3s ease; }
+    footer { text-align:center; padding: 20px; color: var(--muted); }
+    .success { border-left: 6px solid #34a853; padding-left: 10px; color:#136d2d; display:none; }
+    .admin { margin-top: 20px; }
+    .small { font-size: .9rem; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>GAD Interactive Poll</h1>
+    <p>Theme: <strong>Orange</strong> · Collecting <em>Name</em> and <em>Office/School</em> · Built for workplace and school GAD engagement</p>
+  </header>
+  <main>
+    <form id="gadPoll" class="card" aria-label="GAD Interactive Poll">
+      <div class="title" aria-hidden="true">
+        <!-- Gender Equality SVG icon -->
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <circle cx="12" cy="12" r="10" stroke="white" stroke-width="6" opacity=".25"></circle>
+          <path d="M12 3v6m0 0h5" stroke="white" stroke-width="2" stroke-linecap="round"/>
+          <circle cx="9" cy="13" r="3" stroke="white" stroke-width="2"/>
+          <path d="M9 16v3m0 0h-3" stroke="white" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+        <h2 style="margin:0">Participate</h2>
+      </div>
+
+      <p class="notice">Your responses are stored in your browser (local only). Click <em>Export CSV</em> to download anonymous results or with identifiers.</p>
+
+      <div class="meta" role="group" aria-label="Participant information">
+        <label>
+          <span class="small">Full Name</span>
+          <input type="text" id="name" name="name" placeholder="e.g., Aida Noora" required />
+        </label>
+        <label>
+          <span class="small">Office/School</span>
+          <input type="text" id="unit" name="unit" placeholder="e.g., PAWA High School / ICT Office" required />
+        </label>
+      </div>
+
+      <div class="progress" aria-hidden="true"><div class="bar" id="bar"></div></div>
+
+      <!-- Q1 (two options) -->
+      <section class="card grid2" aria-labelledby="q1label">
+        <div class="title">
+          <!-- Monday Mood / Bias icon -->
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <rect x="3" y="3" width="18" height="18" rx="4" fill="var(--orange)" opacity=".15"/>
+            <path d="M7 9h10M7 13h6" stroke="var(--orange)" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+          <h3 id="q1label" style="margin:0">Which is harder?</h3>
+        </div>
+        <p class="q">Which is harder: breaking gender bias or breaking your Monday mood?</p>
+        <div class="options">
+          <label><input type="radio" name="q1" value="Breaking gender bias" required/> Breaking gender bias</label>
+          <label><input type="radio" name="q1" value="Breaking Monday mood"/> Breaking Monday mood</label>
+        </div>
+      </section>
+
+      <!-- Q2 -->
+      <section class="card" aria-labelledby="q2label">
+        <div class="title">
+          <!-- Coffee / Respect / Empathy icon -->
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M5 8h10v6a3 3 0 0 1-3 3H8a3 3 0 0 1-3-3V8z" fill="var(--orange)" opacity=".2"/>
+            <path d="M15 9h3a2 2 0 0 1 0 4h-3" stroke="var(--orange)" stroke-width="2"/>
+            <path d="M7 6s1-1 0-2M10 6s1-1 0-2M13 6s1-1 0-2" stroke="var(--orange)" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+          <h3 id="q2label" style="margin:0">What do we need more in the workplace?</h3>
+        </div>
+        <div class="options">
+          <label><input type="radio" name="q2" value="Respect" required/> Respect</label>
+          <label><input type="radio" name="q2" value="Empathy"/> Empathy</label>
+          <label><input type="radio" name="q2" value="Better Coffee"/> Better Coffee</label>
+        </div>
+      </section>
+
+      <!-- Q3 -->
+      <section class="card" aria-labelledby="q3label">
+        <div class="title">
+          <!-- Empower icon -->
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <circle cx="12" cy="12" r="8" fill="var(--orange)" opacity=".2"/>
+            <path d="M12 7v10M7 12h10" stroke="var(--orange)" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+          <h3 id="q3label" style="margin:0">What empowers you more?</h3>
+        </div>
+        <div class="options">
+          <label><input type="radio" name="q3" value="Appreciation" required/> Appreciation</label>
+          <label><input type="radio" name="q3" value="Equal Opportunities"/> Equal Opportunities</label>
+          <label><input type="radio" name="q3" value="Pay Day"/> Pay Day</label>
+        </div>
+      </section>
+
+      <!-- Q4 -->
+      <section class="card" aria-labelledby="q4label">
+        <div class="title">
+          <!-- Values icon -->
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M12 3l7 5-7 5-7-5 7-5zM5 13l7 5 7-5" fill="var(--orange)" opacity=".2"/>
+            <path d="M5 13l7 5 7-5" stroke="var(--orange)" stroke-width="2"/>
+          </svg>
+          <h3 id="q4label" style="margin:0">Which GAD value should we practice daily?</h3>
+        </div>
+        <div class="options">
+          <label><input type="radio" name="q4" value="Listening" required/> Listening</label>
+          <label><input type="radio" name="q4" value="Boundaries"/> Boundaries</label>
+          <label><input type="radio" name="q4" value="Mindfulness"/> Mindfulness</label>
+        </div>
+      </section>
+
+      <!-- Q5 -->
+      <section class="card" aria-labelledby="q5label">
+        <div class="title">
+          <!-- Issues icon -->
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M4 5h16v6H4z" fill="var(--orange)" opacity=".15"/>
+            <path d="M4 17h16" stroke="var(--orange)" stroke-width="2"/>
+          </svg>
+          <h3 id="q5label" style="margin:0">Where do gender issues show up most?</h3>
+        </div>
+        <div class="options">
+          <label><input type="radio" name="q5" value="Workload" required/> Workload</label>
+          <label><input type="radio" name="q5" value="Communication"/> Communication</label>
+          <label><input type="radio" name="q5" value="Decision-making"/> Decision-making</label>
+        </div>
+      </section>
+
+      <!-- Q6 -->
+      <section class="card" aria-labelledby="q6label">
+        <div class="title">
+          <!-- Change icon -->
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <circle cx="12" cy="12" r="9" fill="var(--orange)" opacity=".15"/>
+            <path d="M8 12h8M12 8v8" stroke="var(--orange)" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+          <h3 id="q6label" style="margin:0">Which workplace change promotes fairness fastest?</h3>
+        </div>
+        <div class="options">
+          <label><input type="radio" name="q6" value="Clear policies" required/> Clear policies</label>
+          <label><input type="radio" name="q6" value="Fair workload"/> Fair workload</label>
+          <label><input type="radio" name="q6" value="Leaders who listen"/> Leaders who listen</label>
+        </div>
+      </section>
+
+      <!-- Q7 -->
+      <section class="card" aria-labelledby="q7label">
+        <div class="title">
+          <!-- Stereotype break icon -->
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M6 6l12 12M18 6L6 18" stroke="var(--orange)" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+          <h3 id="q7label" style="margin:0">Reaction to breaking stereotypes</h3>
+        </div>
+        <div class="options">
+          <label><input type="radio" name="q7" value="Clap" required/> Clap</label>
+          <label><input type="radio" name="q7" value="Cheer"/> Cheer</label>
+          <label><input type="radio" name="q7" value="Screenshot for inspiration"/> Screenshot for inspiration</label>
+        </div>
+      </section>
+
+      <!-- Q8 -->
+      <section class="card" aria-labelledby="q8label">
+        <div class="title">
+          <!-- Win icon -->
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M12 4l3 6 6 .5-4.5 4 1.5 6-6-3.5-6 3.5 1.5-6L3 10.5 9 10l3-6z" fill="var(--orange)" opacity=".2"/>
+          </svg>
+          <h3 id="q8label" style="margin:0">Which GAD win is most satisfying?</h3>
+        </div>
+        <div class="options">
+          <label><input type="radio" name="q8" value="Saying 'No'" required/> Saying ‘No’</label>
+          <label><input type="radio" name="q8" value="Calling out bias"/> Calling out bias</label>
+          <label><input type="radio" name="q8" value="Encouraging others"/> Encouraging others</label>
+        </div>
+      </section>
+
+      <!-- Q9 -->
+      <section class="card" aria-labelledby="q9label">
+        <div class="title">
+          <!-- Normalize icon -->
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <rect x="5" y="5" width="14" height="14" rx="3" fill="var(--orange)" opacity=".15"/>
+            <path d="M9 9h6v6H9z" stroke="var(--orange)" stroke-width="2"/>
+          </svg>
+          <h3 id="q9label" style="margin:0">What should we normalize more?</h3>
+        </div>
+        <div class="options">
+          <label><input type="radio" name="q9" value="Men showing emotions" required/> Men showing emotions</label>
+          <label><input type="radio" name="q9" value="Women leading"/> Women leading</label>
+          <label><input type="radio" name="q9" value="Anyone saying 'I don't know'"/> Anyone saying ‘I don’t know’</label>
+        </div>
+      </section>
+
+      <div class="actions">
+        <button type="submit">Submit response</button>
+        <button type="button" class="secondary" id="export">Export CSV</button>
+        <button type="button" class="secondary" id="clear">Clear local responses</button>
+      </div>
+      <p class="notice">By participating, you agree to use responses for GAD program insights. No external data transmission—everything stays on your device until you export.</p>
+      <div id="success" class="card success">Thank you! Your response has been saved locally.</div>
+    </form>
+
+    <section class="card admin" aria-label="Admin view">
+      <h3>Live Tally</h3>
+      <p class="notice">Counts update as responses are submitted on this device.</p>
+      <div id="tally"></div>
+    </section>
+  </main>
+  <footer>
+    <small>© 2025 GAD Poll · Orange theme · Inline SVG images (no internet required)</small>
+  </footer>
+
+<script>
+(function(){
+  const form = document.getElementById('gadPoll');
+  const success = document.getElementById('success');
+  const bar = document.getElementById('bar');
+  const tallyEl = document.getElementById('tally');
+  const exportBtn = document.getElementById('export');
+  const clearBtn = document.getElementById('clear');
+  const STORAGE_KEY = 'gadPollResponses';
+
+  // Progress bar
+  const inputs = Array.from(form.querySelectorAll('input[type="radio"]'));
+  const groups = Array.from(new Set(inputs.map(i => i.name))).sort();
+  const requiredGroups = groups; // all groups are required via one of the radios
+  function updateProgress(){
+    const answered = requiredGroups.filter(g => form.querySelector('input[name="'+g+'"]:checked')).length;
+    const pct = Math.round((answered / requiredGroups.length) * 100);
+    bar.style.width = pct + '%';
+  }
+  form.addEventListener('change', updateProgress);
+  updateProgress();
+
+  function getStored(){
+    try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || []; }
+    catch(e){ return []; }
+  }
+  function setStored(data){ localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); }
+
+  function rebuildTally(){
+    const data = getStored();
+    const counts = {};
+    data.forEach(r => {
+      Object.keys(r).forEach(k => {
+        if(k.startsWith('q')){
+          counts[k] = counts[k] || {};
+          const v = r[k];
+          counts[k][v] = (counts[k][v]||0) + 1;
+        }
+      });
+    });
+    // Render
+    let html = '';
+    const titles = {
+      q1:'Which is harder?',
+      q2:'What do we need more in the workplace?',
+      q3:'What empowers you more?',
+      q4:'Which GAD value should we practice daily?',
+      q5:'Where do gender issues show up most?',
+      q6:'Which workplace change promotes fairness fastest?',
+      q7:'Reaction to breaking stereotypes',
+      q8:'Which GAD win is most satisfying?',
+      q9:'What should we normalize more?'
+    };
+    Object.keys(titles).forEach(k => {
+      const c = counts[k] || {};
+      html += '<div class="card"><strong>'+titles[k]+'</strong><br/>';
+      const total = Object.values(c).reduce((a,b)=>a+b,0);
+      Object.keys(c).forEach(opt => {
+        const n = c[opt];
+        const pct = total? Math.round(n*100/total):0;
+        html += '<div class="small" style="margin-top:6px">'+opt+': '+n+' ('+pct+'%)</div>';
+      });
+      if(total===0) html += '<div class="small" style="color:var(--muted)">No responses yet.</div>';
+      html += '</div>';
+    });
+    tallyEl.innerHTML = html;
+  }
+  rebuildTally();
+
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    const fd = new FormData(form);
+    const record = {
+      timestamp: new Date().toISOString(),
+      name: fd.get('name'),
+      unit: fd.get('unit'),
+      q1: fd.get('q1'),
+      q2: fd.get('q2'),
+      q3: fd.get('q3'),
+      q4: fd.get('q4'),
+      q5: fd.get('q5'),
+      q6: fd.get('q6'),
+      q7: fd.get('q7'),
+      q8: fd.get('q8'),
+      q9: fd.get('q9')
+    };
+    const data = getStored();
+    data.push(record);
+    setStored(data);
+    success.style.display = 'block';
+    rebuildTally();
+    form.reset();
+    updateProgress();
+  });
+
+  exportBtn.addEventListener('click', function(){
+    const data = getStored();
+    const cols = ['timestamp','name','unit','q1','q2','q3','q4','q5','q6','q7','q8','q9'];
+    const header = cols.join(',');
+    const rows = data.map(r => cols.map(c => {
+      let v = r[c]||'';
+      v = String(v).replace(/"/g,'""');
+      return '"'+v+'"';
+    }).join(','));
+    const csv = [header].concat(rows).join('
+');
+    const blob = new Blob([csv], {type:'text/csv'});
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'GAD_Poll_responses.csv';
+    a.click();
+    URL.revokeObjectURL(a.href);
+  });
+
+  clearBtn.addEventListener('click', function(){
+    if(confirm('Clear all locally stored responses on this device?')){
+      setStored([]);
+      rebuildTally();
+    }
+  });
+})();
+</script>
+</body>
+</html>
